@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Customs Desk Plan</title>
+  <style>
+    :root { --ink:#17352d; --muted:#61756e; --cream:#fffaf1; --green:#1e6f5c; --pink:#ef789b; --pale:#e8f5ee; --line:#d7e4dc; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:linear-gradient(135deg,#f7fff8 0%,#fff2f6 100%); font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1050px; margin:0 auto; padding:42px 22px 70px; }
+    header { margin-bottom:26px; }
+    h1 { margin:0 0 7px; font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; }
+    h2 { color:var(--green); margin-top:0; }
+    h3 { margin-bottom:6px; color:var(--green); }
+    p { margin-top:6px; }
+    .subtitle { color:var(--muted); max-width:700px; }
+    .tabs { display:flex; flex-wrap:wrap; gap:9px; margin:24px 0 0; }
+    button { border:1px solid var(--line); border-radius:999px; background:white; color:var(--ink); cursor:pointer; padding:10px 18px; font:inherit; font-weight:700; }
+    button:hover, button.active { background:var(--green); border-color:var(--green); color:white; }
+    .panel { display:none; background:rgba(255,255,255,.86); border:1px solid var(--line); border-radius:24px; box-shadow:0 14px 40px rgba(30,111,92,.10); padding:28px; }
+    .panel.active { display:block; }
+    .ticket-meta { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 24px; }
+    .tag { background:var(--pale); border-radius:999px; color:var(--green); font-size:.9rem; padding:5px 11px; }
+    .expected { border-left:5px solid var(--pink); padding-left:20px; }
+    .actual { min-height:120px; margin-top:28px; border:2px dashed var(--line); border-radius:16px; padding:18px; color:#91a29c; }
+    .actual h3 { color:#91a29c; }
+    .actual-filled { color:var(--ink); border-color:#9dcfb9; background:#f4fbf6; }
+    .actual-filled h3 { color:var(--green); }
+    .reflection-main { margin:30px 0 14px; padding:10px 14px; border-radius:10px; background:var(--green); color:white; font-size:1.25rem; letter-spacing:.01em; }
+    .reflection-main:first-child { margin-top:0; }
+    .reflection-sub { margin:18px 0 5px; color:var(--green); font-size:1.03rem; }
+    li { margin:8px 0; }
+    code { background:#f3e9ed; border-radius:5px; padding:2px 5px; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Campus Customs Desk Plan</h1>
+    <p class="subtitle">Expected routing for the three open tickets. This is a plan only: no agents have run and no external messages or payments are sent.</p>
+    <nav class="tabs" aria-label="Ticket tabs">
+      <button class="active" data-tab="ticket-101">Ticket 101</button>
+      <button data-tab="ticket-102">Ticket 102</button>
+      <button data-tab="ticket-103">Ticket 103</button>
+      <button data-tab="cash">Cash</button>
+      <button data-tab="reflection">Reflection</button>
+    </nav>
+  </header>
+
+  <section id="ticket-101" class="panel active">
+    <h2>Ticket 101 · Customer order</h2>
+    <div class="ticket-meta"><span class="tag">Tauhid Zaman</span><span class="tag">1 × CC-TEE-WHITE · S</span><span class="tag">Open</span></div>
+    <div class="expected">
+      <h3>Expected</h3>
+      <p><strong>Boss calls first:</strong> Inventory, because the requested size-S tee has zero stock and the first decision is whether the order can be fulfilled through a supported restock path.</p>
+      <h3>Expected delegations</h3>
+      <ol>
+        <li>Boss → Inventory: verify the exact SKU/size shortfall and identify a vendor whose specialty and lead time fit.</li>
+        <li>Inventory → Accounting: ask whether the linked vendor invoice and any restock cost can be supported by cash, and flag the open-invoice purchasing block.</li>
+        <li>Accounting → Inventory: request the exact shortage quantity and vendor lead-time facts before assessing a purchase proposal.</li>
+        <li>Boss → Customer Service: after Inventory and Accounting findings, request a factual draft explaining availability and timing without promising an ETA.</li>
+      </ol>
+      <h3>Expected MCP tools</h3>
+      <ul>
+        <li><code>get_ticket(101)</code> — retrieve the authoritative order and invoice link.</li>
+        <li><code>check_inventory("CC-TEE-WHITE", "S")</code> — confirm zero available units.</li>
+        <li><code>get_invoice_vendor(501)</code> — inspect the open rush-reprint invoice and vendor lead time.</li>
+        <li><code>get_vendor_open_invoices(1)</code> — enforce the unpaid-invoice purchasing rule.</li>
+        <li><code>get_cash_status("checking")</code> — assess cash before any payment or purchase recommendation.</li>
+      </ul>
+    </div>
+    <div class="actual actual-filled"><h3>Actual</h3><p><strong>Resolved:</strong> the $840 invoice 501 payment cleared the vendor-invoice blocker; no duplicate payment was made. The order is closed into the paid reprint workflow; no customer message was sent.</p><p><strong>Agents:</strong> Inventory confirmed the size-S shortage and vendor block; Accounting checked invoice/cash evidence; Boss closed the ticket after reconciling the payment record.</p><p><strong>Delegations:</strong> Boss → Inventory; Inventory → Accounting; Accounting → Boss.</p><p><strong>MCP tools used:</strong> <code>get_ticket(101)</code>, <code>check_inventory(&quot;CC-TEE-WHITE&quot;, &quot;S&quot;)</code>, <code>get_invoice_vendor(501)</code>, <code>get_cash_status(&quot;checking&quot;)</code>.</p></div>
+  </section>
+
+  <section id="ticket-102" class="panel">
+    <h2>Ticket 102 · Rent notice</h2>
+    <div class="ticket-meta"><span class="tag">Elm City Properties</span><span class="tag">Lease 1</span><span class="tag">Open</span></div>
+    <div class="expected">
+      <h3>Expected</h3>
+      <p><strong>Boss calls first:</strong> Facilities, because this is a lease and rent-timing issue; Facilities should establish the authoritative space, landlord, due date, and current shop date before Accounting prepares anything.</p>
+      <h3>Expected delegations</h3>
+      <ol>
+        <li>Boss → Facilities: verify lease 1 and whether rent is upcoming, due, or overdue using <code>desk.date_today</code>.</li>
+        <li>Facilities → Accounting: pass the verified rent amount and due-date facts for a cash and approval assessment.</li>
+        <li>Accounting → Boss: report whether the payment can be proposed without a negative balance and identify the required human approval; do not pay.</li>
+      </ol>
+      <h3>Expected MCP tools</h3>
+      <ul>
+        <li><code>get_ticket(102)</code> — retrieve the lease link and notice details.</li>
+        <li><code>get_lease_rent_status(1)</code> — compare rent due date with <code>desk.date_today</code>.</li>
+        <li><code>get_cash_status("checking")</code> — check affordability before a payment recommendation.</li>
+      </ul>
+    </div>
+    <div class="actual actual-filled"><h3>Actual</h3><p><strong>Resolved:</strong> rent for lease 1 was paid for $2,400 after human approval. The payment left checking at $160 and did not create a negative balance. No landlord was contacted.</p><p><strong>Agents:</strong> Facilities verified the lease and shop-date timing; Accounting checked the $2,560 available balance and payment math; Boss closed the ticket through the approved payment route.</p><p><strong>Delegations:</strong> Boss → Facilities; Facilities → Accounting; Accounting → Boss.</p><p><strong>MCP tools used:</strong> <code>get_ticket(102)</code>, <code>get_lease_rent_status(1)</code>, <code>get_cash_status(&quot;checking&quot;)</code>.</p></div>
+  </section>
+
+  <section id="ticket-103" class="panel">
+    <h2>Ticket 103 · Bulk hoodie discount</h2>
+    <div class="ticket-meta"><span class="tag">Yale AI Club</span><span class="tag">20 × CC-HOOD-NAVY · M</span><span class="tag">Open</span></div>
+    <div class="expected">
+      <h3>Expected</h3>
+      <p><strong>Boss calls first:</strong> Inventory, because the requested quantity exceeds the exact size-M stock and the shortfall must be known before Accounting evaluates margin or a discount.</p>
+      <h3>Expected delegations</h3>
+      <ol>
+        <li>Boss → Inventory: confirm available size-M units and calculate the shortfall; identify whether a suitable vendor exists.</li>
+        <li>Inventory → Accounting: provide the shortage, vendor lead time, and any open-invoice blocker for a possible restock.</li>
+        <li>Accounting → Inventory: request confirmation of quantity and cost assumptions before recommending a discount or purchase.</li>
+        <li>Boss → Customer Service: after the margin decision, request a draft response that states only an approved price and verified availability/timing.</li>
+      </ol>
+      <h3>Expected MCP tools</h3>
+      <ul>
+        <li><code>get_ticket(103)</code> — retrieve the request quantity, SKU, and size.</li>
+        <li><code>check_inventory("CC-HOOD-NAVY", "M")</code> — confirm 8 available against a request for 20.</li>
+        <li><code>get_pricing("CC-HOOD-NAVY")</code> — obtain the $22 cost and $58 list price for margin analysis.</li>
+        <li><code>get_cash_status("checking")</code> — assess affordability before any purchase recommendation.</li>
+      </ul>
+    </div>
+    <div class="actual actual-filled"><h3>Actual</h3><p><strong>Resolved:</strong> no purchase or discount was approved. Eight size-M hoodies were available against a request for 20; the 12-unit shortfall would cost $264, while checking held only $160. No cash changed and no customer commitment was sent.</p><p><strong>Agents:</strong> Inventory calculated the 12-unit shortage; Accounting applied the no-negative-cash rule; Boss closed the request without a restock order or promise.</p><p><strong>Delegations:</strong> Boss → Inventory; Inventory → Accounting; Accounting → Boss.</p><p><strong>MCP tools used:</strong> <code>get_ticket(103)</code>, <code>check_inventory(&quot;CC-HOOD-NAVY&quot;, &quot;M&quot;)</code>, <code>get_pricing(&quot;CC-HOOD-NAVY&quot;)</code>, <code>get_cash_status(&quot;checking&quot;)</code>.</p></div>
+  </section>
+
+  <section id="cash" class="panel"><h2>Cash</h2><div class="expected"><h3>Resolved run cash ledger</h3><ul><li><strong>Starting checking balance:</strong> $3,400.00 after reset.</li><li><strong>Ticket 101:</strong> −$840.00 for approved invoice 501 payment; balance $2,560.00.</li><li><strong>Ticket 102:</strong> −$2,400.00 for approved lease-1 rent payment; balance $160.00.</li><li><strong>Ticket 103:</strong> $0.00; the $264 restock was refused because it would make cash negative.</li><li><strong>Ending checking balance:</strong> $160.00, matching <code>cash_accounts</code>.</li></ul><p><strong>Math:</strong> $3,400.00 − $840.00 − $2,400.00 = $160.00.</p></div></section>
+  <section id="reflection" class="panel">
+    <h2>Reflection</h2>
+    <div class="expected">
+      <h3 class="reflection-main">Agent Performance for Each Ticket:</h3>
+      <h4 class="reflection-sub">Ticket 101 - Bulldog Tee</h4>
+      <p>The agents seemed to interact correctly with one another, and the sequence of steps they took was very logical. For instance, the inventory agent correctly found zero size-S tees while the accounting agent correctly prevented a duplicate payment after the 501 invoice was paid. That being said, there was an issue with stock shortage that should have resulted in the ticket not being resolved (since the customer did not end up with the tee).</p>
+      <h4 class="reflection-sub">Ticket 102 - Rent Notice</h4>
+      <p>The agents seemed to handle the numbers and money arithmetic pretty well. Facilities correctly identified the rent about and shop date while the accounting agent confirmed a difference of $160 (so there wasn’t a negative balance as specified). Again, the agents’ steps were logical, and they delegated to one another as needed.</p>
+      <h4 class="reflection-sub">Ticket 103 - Bulk Hoodies</h4>
+      <p>This, in my opinion, was the smoothest ticket for the agents to resolve. They worked together well, with the inventory agent correctly detecting a shortage of 12 hoodies and calling on accounting to compute the cost of replacing the 12 hoodies. The accounting agent also made a good call to refuse the purchase to avoid a negative balance (since the replacement cost was $264 while we only had $160).</p>
+
+      <h3 class="reflection-main">Actual vs. Expected:</h3>
+      <h4 class="reflection-sub">Ticket 101 - Bulldog Tee</h4>
+      <p>The expected plan called for the customer service agent to take action, which didn’t initially happen when I first ran the agents to resolve this ticket. (I did prompt the vibe coder to add this feature, then it matched the expected plan.) The expected plan anticipated a vendor check that did not happen in actuality. This is one possible improvement that could be made to my model (to verify whether Bulldog Print Co is eligible for another purchase).</p>
+      <h4 class="reflection-sub">Ticket 102 - Rent Notice</h4>
+      <p>The Expected vs. Actual for this one were identical to one another. The boss agent delegated to the facilities agent, who then called on the accounting agent. The accounting agent then called back to the boss agent at the end.</p>
+      <h4 class="reflection-sub">Ticket 103 - Bulk Hoodies</h4>
+      <p>The sequence/chain of agents calling each other in the actual execution matched the expectation closely. Like Ticket 101, I originally didn’t have the customer service agent in the flow (like it was outlined in the expected text), but once it was added, it acted as expected.</p>
+
+      <h3 class="reflection-main">What would’ve been simpler with one agent + tools?</h3>
+      <p>Ticket 102 could have been handled with just one agent equipped with lease, cash, and payment approval tools since the flow was simple and linear. Ticket 103 could maybe be handled by one agent with tools for accounting and inventory because the calculation here was simple and direct. I don’t think one agent would be plausible for Ticket 101, however, since it involves so many delegations and steps compared to the other two tickets. Its complexities are best handled by multiple specialized agents.</p>
+
+      <h3 class="reflection-main">3 Problems Our Model Could Solve:</h3>
+      <p>One new problem could be a case of a low-stock college event order, where an organization requests 30+ Yale caps for an event. Our inventory agent could check the blue hat quantity by size, the accounting agent could compare unit cost and list price, and the boss agent could make the final judgement call on whether a discount could be allowed/is feasible. The customer service agent could then draft a response to the organization letting them know whether we could or could not discount their order.</p>
+      <p>Another possible problem would be an overdue supplier invoice review. If a new ticket were to reference an open invoice, the accounting agent could use invoice and vendor data to compare the due date to the desk.date_today metric, check the cash amount, and prepare a human approval request.</p>
+      <p>Lastly, another problem that could arise is a shop lease reminder. The facilities agent can retrieve the lease, compare the due date with the desk date, and delegate to the accounting agent to check our cash. The approval flow could record the payment and reduce checking after getting human approval.</p>
+
+      <h3 class="reflection-main">3 Problems Our Model Could Not Solve:</h3>
+      <p>One problem we wouldn’t be able to solve is receiving and fulfilling a reprint shipment. For instance, Bulldog Print Co may confirm the delivery of new size-S tees. The app as it exists now can’t receive stock or update inventory. It’s also unable to reserve apparel items for certain customers. It would need tools like receive_inventory, reserve_inventory, and fulfill_customer_order.</p>
+      <p>Another issue that could come up is sending a real approved customer email, as the model is currently only equipped to make a draft email, not actually send it out. We would need to add tools for email integration, possibly message templates for the customer service agent to follow, a human-one approval step, and log of sent/status.</p>
+      <p>Lastly, an issue that could come up is reconciling revenue and sales payments. The current model only treats cash as outgoing and doesn’t record customer payment, refunds, sales, etc. We would need a payment processor tool, cash tools, and fields for orders, sales, and refunds to be able to track incoming cash.</p>
+    </div>
+  </section>
+</main>
+<script>
+  const buttons = document.querySelectorAll('button[data-tab]');
+  const panels = document.querySelectorAll('.panel');
+  buttons.forEach(button => button.addEventListener('click', () => {
+    buttons.forEach(item => item.classList.toggle('active', item === button));
+    panels.forEach(panel => panel.classList.toggle('active', panel.id === button.dataset.tab));
+  }));
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "database": "data/campus_customs_new.db",
+  "tools_discovered": [
+    "check_inventory",
+    "get_invoice_vendor",
+    "get_lease_rent_status"
+  ],
+  "tests": [
+    {
+      "prompt": "Use the Campus Customs MCP server to check inventory for SKU CC-HOOD-NAVY in size M.",
+      "tool_name": "check_inventory",
+      "tool_output": {
+        "sku": "CC-HOOD-NAVY",
+        "name": "Basic Hoodie Big Yale",
+        "size": "M",
+        "qty": 8,
+        "location": "Aisle A"
+      }
+    },
+    {
+      "prompt": "Use the Campus Customs MCP server to retrieve invoice 501 and its linked vendor.",
+      "tool_name": "get_invoice_vendor",
+      "tool_output": {
+        "invoice_id": 501,
+        "vendor_id": 1,
+        "amount": 840.0,
+        "due_date": "2026-08-28",
+        "status": "open",
+        "description": "Rush reprint CC-TEE-WHITE S",
+        "vendor_name": "Bulldog Print Co",
+        "specialty": "apparel reprint",
+        "lead_days": 5
+      }
+    },
+    {
+      "prompt": "Use the Campus Customs MCP server to retrieve lease 1 and its rent status.",
+      "tool_name": "get_lease_rent_status",
+      "tool_output": {
+        "lease_id": 1,
+        "space_name": "Chapel Street shop",
+        "landlord": "Elm City Properties",
+        "monthly_rent": 2400.0,
+        "next_due": "2026-09-02",
+        "date_today": "2026-08-31"
+      }
+    }
+  ]
+}

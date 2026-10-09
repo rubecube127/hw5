@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Runtime output is generated during local runs.
+output/audit_trail.json
